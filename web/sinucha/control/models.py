@@ -106,5 +106,14 @@ def create_stock(sender, instance, **kwargs):
     object_product = Item.objects.get(id=instance.item.id)
     object_product.stock += instance.units
     object_product.save()
+    
+    
+@receiver(post_save, sender=Balance, dispatch_uid="add_payment_user")
+def update_user_balance(sender, instance, **kwargs):
+    
+    user = User_Data.objects.get(id=instance.user.id)
+    user.balance_actual += instance.amount_entered
+    user.save()
+
 
 #import pdb; pdb.set_trace()
