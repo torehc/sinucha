@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 import datetime
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class User_Data(models.Model):
 
@@ -97,3 +99,12 @@ class Sale_History(models.Model):
     
     def __str__(self):
         return '{} - {}'.format(self.item, self.user)
+ 
+        
+@receiver(post_save, sender=Shopping_History, dispatch_uid="create_stock_item")
+def create_stock(sender, instance, **kwargs):
+    object_product = Item.objects.get(id=instance.item.id)
+    object_product.stock += instance.units
+    object_product.save()
+
+#import pdb; pdb.set_trace()
