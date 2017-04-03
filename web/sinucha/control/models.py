@@ -28,6 +28,26 @@ class User_Data(models.Model):
     def __str__(self):
         return '{}'.format(self.username)
 
+    @staticmethod
+    def check_user_balance(rfid,barcode):
+        
+        user = User_Data.objects.get(tagRfid=rfid)
+        item = Item.objects.get(barcode=barcode)
+        
+        if(user.balance_actual >= item.price_sale):
+            
+            user.balance_actual -= item.price_sale
+            user.save()
+            
+            item.stock = (item.stock)-1
+            item.save()
+            
+            Sale_History.create_sale(item,user)
+            return True
+            
+        else:
+            return False
+            
 
 class Balance(models.Model):
 
@@ -98,7 +118,18 @@ class Sale_History(models.Model):
     price_cost = models.DecimalField(max_digits=5, decimal_places=2, default=0)
     
     def __str__(self):
-        return '{} - {}'.format(self.item, self.user)
+        return '{}: {} - {}'.format(self.item, self.user, self.price_sale)
+    
+    @staticmethod
+    def create_sale(item,user):
+        bought_item = Shopping_History.objects.filter(item=item).last()
+        
+        create_sale = Sale_History.objects.create(
+            item=item,
+            user=user,
+            price_sale=item.price_sale,
+            price_cost=bought_item.unit_purchase_price,
+            )
  
         
 @receiver(post_save, sender=Shopping_History, dispatch_uid="create_stock_item")

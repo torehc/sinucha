@@ -19,11 +19,11 @@ class Shopping_HistoryAdmin(admin.ModelAdmin):
     list_display = ('item', 'date', 'units', 'unit_purchase_price', 'supermarket')
     search_fields = ('item', 'supermarket')
   
-class Sale_HistoryAdmin(admin.ModelAdmin):
-    list_disply = ('item', 'date', 'price_sale', 'price_cost')
+class Sale_History_Admin(admin.ModelAdmin):
+    list_disply = ('item', 'user', 'date', 'price_sale', 'price_cost')
   
 admin.site.register(User_Data, User_DataAdmin)
 admin.site.register(Balance, Balance_Admin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Shopping_History, Shopping_HistoryAdmin)
-admin.site.register(Sale_History, Sale_HistoryAdmin)
+admin.site.register(Sale_History, Sale_History_Admin)
