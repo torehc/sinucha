@@ -2,8 +2,14 @@
 
 import signal
 import time
-import sys
 import serial
+import sys
+sys.path.append('../web/sinucha/')
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sinucha.settings")
+import django
+django.setup()
+from control.models import User_Data
 
 from pirc522 import RFID
 
@@ -31,15 +37,21 @@ while run:
 
     (error, uid) = rdr.anticoll()
     if not error:
-        print("Card read UID: "+str(uid[0])+","+str(uid[1])+","+str(uid[2])+","+str(uid[3]))
-        tag = ",".join([str(x) for x in uid[:-1]])
+        print("Card read UID: "+str(uid[0])+"."+str(uid[1])+"."+str(uid[2])+"."+str(uid[3]))
+        tag = ".".join([str(x) for x in uid[:-1]])
         #print(tag)
-        timeout = time.time() + 60*1 #1 min While
+        """
+        #I keep the last tag in a file for use in other applications
+        outfile = open('/var/run/last_rfid.tag', 'w') #Saved in RAM filesystem for faster speed
+        outfile.write(tag)
+        outfile.close()
+        """
         while True:
           barcode = 0
           barcode = input("Scan Barcode: ")
-          if barcode != 0 or time.time() > timeout:
+          if barcode != 0:
             #print(barcode)
+            User_Data.check_user_balance(tag,barcode)
             break
 
         """

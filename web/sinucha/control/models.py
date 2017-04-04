@@ -29,6 +29,19 @@ class User_Data(models.Model):
         return '{}'.format(self.username)
 
     @staticmethod
+    def check_user_chatid(chatid):
+        
+        if (User_Data.objects.filter(chatid=chatid)): 
+            return True
+        else: 
+            return False
+    """    
+    def register_user(chatid, rfid):
+        if(chatid ): #si chatid está guardado, usuario registrado
+            # TODO: write code...
+        else:
+    """        
+    @staticmethod        
     def check_user_balance(rfid,barcode):
         
         user = User_Data.objects.get(tagRfid=rfid)
@@ -61,7 +74,7 @@ class Balance(models.Model):
     
     user = models.ForeignKey(User_Data, blank=False)
     amount_entered = models.DecimalField(max_digits=5, decimal_places=2, default=0, blank=False)
-    type_amount = models.CharField(max_length=5,
+    type_amount = models.CharField(max_length=6,
                                       choices=TYPE_PAYMENT,
                                       default=CASH,
                                       blank=False,
