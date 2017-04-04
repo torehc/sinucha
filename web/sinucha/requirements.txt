@@ -1,5 +1,4 @@
 django==1.10.6
 django-material
 django-extensions
-django-material
 python-telegram-bot
