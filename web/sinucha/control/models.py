@@ -17,8 +17,8 @@ class User_Data(models.Model):
     tagRfid = models.CharField(max_length=64, blank=False)
     chatid = models.DecimalField(max_digits=12, decimal_places=0)
     balance_actual = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    username = models.CharField(max_length=20, blank=False)
-    user = models.ForeignKey(User)
+    username = models.CharField(max_length=20, blank=True)
+    user = models.ForeignKey(User, null=True, blank=True)
     rol = models.CharField(max_length=5,
                                       choices=ROL_CHOICES,
                                       default=USER,
@@ -35,12 +35,19 @@ class User_Data(models.Model):
             return True
         else: 
             return False
-    """    
+     
+    @staticmethod
     def register_user(chatid, rfid):
-        if(chatid ): #si chatid está guardado, usuario registrado
-            # TODO: write code...
+        
+        if(User_Data.check_user_chatid(chatid)):
+            return False
         else:
-    """        
+            create_user = User_Data.objects.create(
+                tagRfid = rfid,
+                chatid = chatid,
+                )
+            return True
+            
     @staticmethod        
     def check_user_balance(rfid,barcode):
         

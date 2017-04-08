@@ -40,12 +40,12 @@ while run:
         print("Card read UID: "+str(uid[0])+"."+str(uid[1])+"."+str(uid[2])+"."+str(uid[3]))
         tag = ".".join([str(x) for x in uid[:-1]])
         #print(tag)
-        """
+        
         #I keep the last tag in a file for use in other applications
         outfile = open('/var/run/last_rfid.tag', 'w') #Saved in RAM filesystem for faster speed
         outfile.write(tag)
         outfile.close()
-        """
+        
         while True:
           barcode = 0
           barcode = input("Scan Barcode: ")
