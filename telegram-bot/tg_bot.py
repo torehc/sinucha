@@ -42,7 +42,6 @@ def echo(bot, update):
     
 def saldo(bot, update):
     tg_user = update.message.from_user #Telegram User
-    #import pdb; pdb.set_trace()
     user = User_Data.objects.get(chatid=tg_user.id)
     update.message.reply_text('Su saldo es: '+str(user.balance_actual)+'€')
 
@@ -73,11 +72,9 @@ def button(bot, update):
                         message_id=query.message.message_id)
    
     if(query.data == 'SI'):
-        print("en el si")
         infile = open('/var/run/last_rfid.tag', 'r')
         tag = infile.readline()
         infile.close()
-        print("fin fichero")
         
         if( User_Data.register_user(query.message.chat_id, tag[:-1]) ):
             bot.editMessageText(text="Usuario creado correctamente",
